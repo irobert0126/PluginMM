@@ -43,21 +43,11 @@ public class MyActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            android.util.Log.d("tluo", "ABroadcastReceiver Triggered: " + intent.getAction() + "|" + intent.getStringExtra("APK_PATH"));
+            android.util.Log.d("tluo", "ABroadcastReceiver Rely to C2IntentService: " + intent.getAction());
             if (ACTION_c2_INSTALL_APK.equals(intent.getAction())) {
                 ComponentName comp = new ComponentName(context.getPackageName(), C2Service.class.getName());
                 intent.setComponent(comp);
-                //context.startService(intent);
-                /*try {
-                    String c2Command = "com.example.INSTALL_APK";
-                    Intent msgIntent = new Intent(context, C2Service.class);
-                    msgIntent.setAction(c2Command);
-                    msgIntent.putExtra("APK_PATH", intent.getData().getPath());
-                    context.startService(msgIntent);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }*/
+                context.startService(intent);
             } else {
             }
         }

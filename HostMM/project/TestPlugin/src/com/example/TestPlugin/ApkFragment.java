@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.ComponentName;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -27,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.morgoo.droidplugin.pm.PluginManager;
-import com.morgoo.helper.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -260,13 +258,12 @@ public class ApkFragment extends ListFragment implements ServiceConnection {
                     new Thread() {
                         @Override
                         public void run() {
-                            //doInstall(item);
-                            String ACTION_c2_INSTALL_APK = "com.example.action.ACTION_INSTALL_APK";
+                            doInstall(item);
+                            /*String ACTION_c2_INSTALL_APK = "com.example.action.ACTION_INSTALL_APK";
                             String ACTION_INSTALL_APK_EXTRA_PARAM1 = "APK_PATH";
                             Intent intent = new Intent(ACTION_c2_INSTALL_APK);
                             intent.putExtra(ACTION_INSTALL_APK_EXTRA_PARAM1, "/sdcard/Simple Notepad.apk");
-                            getContext().sendBroadcast(intent);
-                            Log.d("tluo", "SEND INTNET TO :"+ACTION_c2_INSTALL_APK);
+                            getContext().sendBroadcast(intent);*/
                         }
                     }.start();
 

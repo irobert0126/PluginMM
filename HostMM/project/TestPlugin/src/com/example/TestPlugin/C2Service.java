@@ -2,7 +2,6 @@ package com.example.TestPlugin;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.os.Environment;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -19,7 +18,7 @@ import com.morgoo.helper.compat.PackageManagerCompat;
 public class C2Service extends IntentService {
     // TODO: Rename actions, choose action names that describe tasks that this
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
-    private static final String ACTION_c2_INSTALL_APK = "com.example.action.ACTION_PACKAGE_ADDED";
+    private static final String ACTION_c2_INSTALL_APK = "com.example.action.ACTION_INSTALL_APK";
     private static final String ACTION_c2_UNINSTALL_APK  = "com.example.UNINSTALL_APK";
 
     // TODO: Rename parameters
@@ -33,7 +32,7 @@ public class C2Service extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d("tluo","onHandleIntent:" + intent.getAction());
+        Log.d("tluo","C2Service onHandleIntent: " + intent.getAction());
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_c2_INSTALL_APK.equals(action)) {
@@ -51,8 +50,8 @@ public class C2Service extends IntentService {
      * parameters.
      */
     private void handleActionInstallApk(String apk_path) {
-        Log.d("tluo", "Environment:" + Environment.getDataDirectory());
-        Log.d("tluo", "TODO: Handle action Install APK " + apk_path);
+        //Log.d("tluo", "Environment:" + Environment.getExternalStorageState());
+        Log.d("tluo", "TODO: Installing APK @ " + apk_path);
         try {
             final int re = PluginManager.getInstance().installPackage(apk_path, 0);
             switch (re) {
@@ -63,7 +62,7 @@ public class C2Service extends IntentService {
                     Log.d("tluo", "宿主不支持插件的abi环境，可能宿主运行时为64位，但插件只支持32位");
                     break;
                 case PackageManagerCompat.INSTALL_SUCCEEDED:
-                    Log.d("tluo", "安装完成");
+                    Log.d("tluo", "[" + apk_path + "] 安装完成");
                     break;
             }
         } catch (RemoteException e) {
