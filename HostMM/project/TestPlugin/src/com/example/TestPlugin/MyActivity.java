@@ -1,5 +1,10 @@
 package com.example.TestPlugin;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -7,10 +12,8 @@ import android.content.pm.PermissionInfo;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 
 import com.morgoo.helper.Log;
@@ -24,6 +27,41 @@ import java.util.TreeSet;
 
 public class MyActivity extends AppCompatActivity {
 
+    String ACTION_c2_INSTALL_APK = "com.example.action.ACTION_INSTALL_APK";
+    public ABroadcastReceiver mABroadcastReceiver = new ABroadcastReceiver();
+    public class ABroadcastReceiver extends BroadcastReceiver {
+
+        void registerReceiver(Context con) {
+            IntentFilter f = new IntentFilter();
+            f.addAction(ACTION_c2_INSTALL_APK);
+            con.registerReceiver(this, f);
+        }
+
+        void unregisterReceiver(Context con) {
+            con.unregisterReceiver(this);
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            android.util.Log.d("tluo", "ABroadcastReceiver Triggered: " + intent.getAction() + "|" + intent.getStringExtra("APK_PATH"));
+            if (ACTION_c2_INSTALL_APK.equals(intent.getAction())) {
+                ComponentName comp = new ComponentName(context.getPackageName(), C2Service.class.getName());
+                intent.setComponent(comp);
+                //context.startService(intent);
+                /*try {
+                    String c2Command = "com.example.INSTALL_APK";
+                    Intent msgIntent = new Intent(context, C2Service.class);
+                    msgIntent.setAction(c2Command);
+                    msgIntent.putExtra("APK_PATH", intent.getData().getPath());
+                    context.startService(msgIntent);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }*/
+            } else {
+            }
+        }
+    }
 
     private static final String TAG = "MyActivity";
 
@@ -61,6 +99,7 @@ public class MyActivity extends AppCompatActivity {
         setContentView(R.layout.main);
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mFragmentStatePagerAdapter);
+        mABroadcastReceiver.registerReceiver(getApplication());
 //        getPerms();
     }
 
